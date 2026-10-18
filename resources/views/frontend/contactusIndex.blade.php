@@ -116,6 +116,7 @@
             </div>
         </div>
     </section>
+    @include('frontend.partials.stickyCta')
 @endsection
 
 @section('jsIndex')

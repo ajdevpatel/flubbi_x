@@ -92,7 +92,7 @@
                         order_id: o.order_id,
                         prefill: o.prefill,
                         notes: o.notes,
-                        theme: { color: "#1a56db" },
+                        theme: { color: "#5d3693" },
                         handler: function (r) {
                             $btn.html('<i class="fas fa-spinner fa-spin"></i> Confirming payment...');
                             post(res.verify_url, {

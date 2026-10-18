@@ -74,4 +74,5 @@
     </section>
 
     @include('frontend.partials.ctaBand', ['heading' => 'Have a question about cards?', 'text' => 'Tell us what you are looking for and we will get back to you. Meanwhile, our loan services are live.'])
+    @include('frontend.partials.stickyCta', ['label' => 'Cards coming soon', 'text' => 'Loans are live today'])
 @endsection

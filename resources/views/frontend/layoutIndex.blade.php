@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#1a56db">
+    <meta name="theme-color" content="#5d3693">
 
     <link rel="icon" type="image/png" sizes="56x56" href="{{ asset('store/logo-mark.png') }}">
     <link rel="shortcut icon" href="{{ asset('store/favicon.webp') }}" type="image/x-icon">
@@ -64,7 +64,7 @@
         'linkedin' => 'fab fa-linkedin-in',
         'youtube' => 'fab fa-youtube',
         'twitter' => 'fab fa-x-twitter',
-        'threads' => 'fab fa-threads',
+        'threads' => 'fb-ico fb-ico--threads', // bundled FontAwesome webfont has no Threads glyph; CSS mask of assets/images/threads-brands-solid.svg
     ];
     $fb_social = array_filter($fb_social, fn ($u) => !empty($u) && '#' !== $u);
 
@@ -93,7 +93,7 @@
                     <span><i class="bi bi-clock"></i> Mon&ndash;Sat, 9 AM &ndash; 6 PM</span>
                 </div>
                 <div class="fb-topbar__right">
-                    <span>RBI regulated lending partners</span>
+                    <span><i class="bi bi-patch-check-fill"></i> RBI regulated lending partners</span>
                     <div class="fb-topbar__social">
                         @foreach ($fb_social as $k => $u)
                             @if (isset($fb_social_icons[$k]))
@@ -134,12 +134,14 @@
                 </ul>
 
                 <div class="fb-header__actions">
-                    <a class="fb-header__phone" href="tel:{{ $fb_phone_digits }}"><i class="bi bi-telephone-fill"></i> {{ $fb_phone }}</a>
+                    <a class="fb-header__phone" href="tel:{{ $fb_phone_digits }}"><i class="bi bi-telephone-fill"></i> <span>{{ $fb_phone }}</span></a>
                     @if ($fb_logged_in)
+                        <a class="fl-btn fl-btn--sm fl-btn--ghost" href="{{ route('_personalServiceStart', ['login_type' => 'consultant']) }}"><i class="bi bi-headset"></i> Hire Agent</a>
                         <a class="fl-btn fl-btn--sm" href="{{ route('_userDashboard') }}"><i class="bi bi-person-circle"></i> My Account</a>
                     @else
                         <a class="fl-btn fl-btn--sm fl-btn--ghost" href="{{ route('_userLogin') }}"><i class="bi bi-box-arrow-in-right"></i> Login</a>
-                        <a class="fl-btn fl-btn--sm" href="{{ route('_personalServiceStart') }}">Apply Now</a>
+                        <a class="fl-btn fl-btn--sm fl-btn--ghost fb-hide-lg" href="{{ route('_personalServiceStart', ['login_type' => 'self']) }}"><i class="bi bi-person-check"></i> Self Apply</a>
+                        <a class="fl-btn fl-btn--sm" href="{{ route('_personalServiceStart', ['login_type' => 'consultant']) }}"><i class="bi bi-headset"></i> Hire an Agent</a>
                     @endif
                     <button class="fb-burger" type="button" data-fb-drawer-open aria-label="Open menu"><i class="bi bi-list"></i></button>
                 </div>
@@ -179,7 +181,8 @@
                 <a class="fl-btn" href="{{ route('_userDashboard') }}"><i class="bi bi-person-circle"></i> My Account</a>
                 <a class="fl-btn fl-btn--ghost" href="{{ route('_userLogout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a>
             @else
-                <a class="fl-btn" href="{{ route('_personalServiceStart') }}">Check eligibility <i class="bi bi-arrow-right"></i></a>
+                <a class="fl-btn" href="{{ route('_personalServiceStart', ['login_type' => 'consultant']) }}"><i class="bi bi-headset"></i> Hire an Agent</a>
+                <a class="fl-btn fl-btn--outline" href="{{ route('_personalServiceStart', ['login_type' => 'self']) }}"><i class="bi bi-person-check"></i> Easy Self-Apply</a>
                 <a class="fl-btn fl-btn--ghost" href="{{ route('_userLogin') }}"><i class="bi bi-box-arrow-in-right"></i> Login to My Account</a>
             @endif
         </div>

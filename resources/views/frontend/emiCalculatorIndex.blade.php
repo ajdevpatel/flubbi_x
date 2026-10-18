@@ -187,6 +187,7 @@
     </section>
 
     @include('frontend.partials.ctaBand', ['heading' => 'Like the numbers?', 'text' => 'Check your real eligibility in two minutes and get a pre-approved offer from ' . $app_name . '.'])
+    @include('frontend.partials.stickyCta', ['label' => 'Like the numbers?', 'text' => 'Check real eligibility'])
 @endsection
 
 @section('jsIndex')

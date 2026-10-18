@@ -115,4 +115,5 @@
     </section>
 
     @include('frontend.partials.ctaBand')
+    @include('frontend.partials.stickyCta')
 @endsection

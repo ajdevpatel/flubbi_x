@@ -222,3 +222,105 @@
         body.classList.add("has-sticky-cta");
     }
 })();
+
+/* ---------------------------------------------------------- quick apply (hero) */
+(function () {
+    "use strict";
+
+    var doc = document;
+
+    function qsa(sel, root) {
+        return Array.prototype.slice.call((root || doc).querySelectorAll(sel));
+    }
+
+    var KEY = "fl_quick_phone";
+
+    qsa("[data-fb-quick]").forEach(function (box) {
+        var form = box.querySelector(".fb-quick__form");
+        var input = box.querySelector("input[name=phone]");
+        var hint = box.querySelector(".fb-quick__hint");
+        if (!form || !input) {
+            return;
+        }
+
+        qsa(".fb-mode button[data-mode]", box).forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                qsa(".fb-mode button", box).forEach(function (b) {
+                    b.classList.toggle("is-active", b === btn);
+                });
+                form.setAttribute("data-mode", btn.getAttribute("data-mode"));
+                input.focus();
+            });
+        });
+
+        input.addEventListener("input", function () {
+            input.value = input.value.replace(/\D/g, "").slice(0, 10);
+            if (hint) {
+                hint.classList.remove("is-show");
+            }
+        });
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            var phone = input.value.replace(/\D/g, "");
+            if (!/^[6-9][0-9]{9}$/.test(phone)) {
+                if (hint) {
+                    hint.textContent = "Please enter a valid 10 digit Indian mobile number.";
+                    hint.classList.add("is-show");
+                }
+                input.focus();
+                return false;
+            }
+            try {
+                window.sessionStorage.setItem(KEY, phone);
+            } catch (err) {
+                /* storage unavailable: the user types the number again on the next step */
+            }
+            var mode = form.getAttribute("data-mode") === "consultant" ? "consultant" : "self";
+            var url = form.getAttribute("data-" + mode) || form.getAttribute("data-self");
+            if (url) {
+                window.location.href = url;
+            }
+            return false;
+        });
+    });
+
+    /* pre-fill the verify step with the number typed in the hero */
+    var verify = doc.getElementById("fl-verify-form");
+    if (verify) {
+        var phoneField = verify.querySelector("input[name=phone]");
+        try {
+            var saved = window.sessionStorage.getItem(KEY);
+            if (saved && phoneField && !phoneField.value && !phoneField.readOnly) {
+                phoneField.value = saved;
+                var nameField = verify.querySelector("input[name=name]");
+                if (nameField && !nameField.value) {
+                    nameField.focus();
+                }
+            }
+            window.sessionStorage.removeItem(KEY);
+        } catch (err) {
+            /* ignore */
+        }
+    }
+
+    /* partner grid: load more / view less */
+    qsa("[data-fb-more]").forEach(function (btn) {
+        var grid = doc.querySelector("[data-fb-partners]");
+        if (!grid) {
+            return;
+        }
+        var open = false;
+        var hidden = qsa(".fb-partners-grid__item", grid).filter(function (el) {
+            return el.classList.contains("is-hidden");
+        });
+        btn.addEventListener("click", function () {
+            open = !open;
+            hidden.forEach(function (el) {
+                el.classList.toggle("is-hidden", !open);
+            });
+            btn.innerHTML = (open ? btn.getAttribute("data-less-text") : btn.getAttribute("data-more-text"))
+                + ' <i class="bi ' + (open ? "bi-chevron-up" : "bi-chevron-down") + '"></i>';
+        });
+    });
+})();
